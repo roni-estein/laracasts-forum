@@ -80,5 +80,5 @@ class FavoriteTest extends DBTestCase
         $this->assertDatabaseMissing('favorites',['user_id' => $notTheAuthor->id, 'favorited_id' => $reply->id, 'favorited_type' => 'App\Reply']);
 
     }
-    
+
 }
