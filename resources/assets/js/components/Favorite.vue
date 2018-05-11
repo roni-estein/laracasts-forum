@@ -9,7 +9,7 @@
     export default {
         props: ['reply'],
 
-        data(){
+        data (){
             return {
                 count: this.reply.favoritesCount,
                 active: this.reply.isFavorited,

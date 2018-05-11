@@ -6,6 +6,13 @@
  */
 window.Vue = require('vue');
 
+Vue.prototype.authorize = function ( handler ) {
+    let user = window.App.user;
+
+    return user ? handler(window.App.user) : false;
+};
+
+
 require('./bootstrap');
 
 
@@ -17,7 +24,8 @@ require('./bootstrap');
  */
 
 Vue.component('flash', require('./components/Flash.vue'));
-Vue.component('reply', require('./components/Reply.vue'));
+
+Vue.component('thread-view', require('./pages/Thread.vue'));
 // Vue.component('favorite', require('./components/Favorite.vue'));
 
 const app = new Vue({
