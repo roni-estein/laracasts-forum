@@ -33,18 +33,7 @@
                         </div>
                     </div>
 
-                    <replies
-                            :data="{{ $thread->replies }}"
-                            @removed="repliesCount--"
-                            @created="repliesCount++"
-
-                    ></replies>
-
-
-                    {{--{{ $replies->links() }}--}}
-
-
-
+                    <replies @removed="repliesCount--" @created="repliesCount++"></replies>
 
                 </div>
 

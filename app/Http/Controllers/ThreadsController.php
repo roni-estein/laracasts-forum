@@ -85,8 +85,7 @@ class ThreadsController extends Controller
     {
 
         $thread = Thread::find($thread_id);
-        $replies = $thread->replies()->paginate(20);
-        return view('threads.show')->withThread($thread)->withReplies($replies);
+        return view('threads.show')->withThread($thread);
     }
 
     /**

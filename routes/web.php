@@ -8,6 +8,7 @@ Route::get('/', function () {
 
 Route::resource('threads','ThreadsController',['except' =>['destroy','show','update','edit']]);
 
+Route::get('/threads/{channel}/{thread}/replies','RepliesController@index');
 Route::post('/threads/{channel}/{thread}/replies','RepliesController@store');
 Route::get('/threads/{channel}','ThreadsController@index')->name('threads.show');
 Route::get('/threads/{channel}/{id}','ThreadsController@show')->name('threads.show');
