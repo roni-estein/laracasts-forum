@@ -17,18 +17,24 @@ class RepliesController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function store($channel_id, Thread $thread)
     {
 
-        $this->validate(\request(),['body' =>'required']);
-//        $thread = Thread::find($thread_id);
-        $thread->addReply([
-            'body' => \request('body'),
+        $this->validate(request(), ['body' => 'required']);
+
+        $reply = $thread->addReply([
+            'body' => request('body'),
             'user_id' => auth()->id()
         ]);
+
+
+        if (request()->expectsJson()) {
+            return $reply->load('owner');
+
+        }
 
         return back()->with('flash', 'Your reply has been left');
     }
@@ -39,13 +45,13 @@ class RepliesController extends Controller
 
         $reply->delete();
 
-        if(request()->expectsJson()){
-            return response(['status' => 'Reply Deleted'],204);
+        if (request()->expectsJson()) {
+            return response(['status' => 'Reply Deleted'], 204);
         }
-        return back()->with('flash','Your reply was removed');
+        return back()->with('flash', 'Your reply was removed');
     }
 
-    public function update(Request $request,Reply $reply)
+    public function update(Request $request, Reply $reply)
     {
         $this->authorize('update', $reply);
 
@@ -56,7 +62,7 @@ class RepliesController extends Controller
         $reply->body = $request->body;
         $reply->save();
 
-        return response(['message' => 'Reply Updated'],204);
+        return response(['message' => 'Reply Updated'], 204);
         //return back()->with('flash', 'Reply Updated');
     }
 

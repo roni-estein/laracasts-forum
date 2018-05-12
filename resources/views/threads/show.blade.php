@@ -33,22 +33,17 @@
                         </div>
                     </div>
 
-                    <replies :data="{{ $thread->replies }}" @removed="repliesCount--"></replies>
+                    <replies
+                            :data="{{ $thread->replies }}"
+                            @removed="repliesCount--"
+                            @created="repliesCount++"
+
+                    ></replies>
 
 
                     {{--{{ $replies->links() }}--}}
-                    @auth
-                        <form method="post" action="{{ $thread->path() . '/replies'}}">
-                            {{ csrf_field() }}
-                            <div class="form-group">
-                            <textarea name="body" id="body" class="form-control" placeholder="Have something to say?"
-                                      rows="5"></textarea>
-                            </div>
-                            <button type="submit" class="btn bt-primary">Post</button>
-                        </form>
-                    @else
-                        <div class="text-center">Please <a href="{{route('login')}}">Sign In</a> to participate</div>
-                    @endauth
+
+
 
 
                 </div>
