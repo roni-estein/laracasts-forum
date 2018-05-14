@@ -24,9 +24,9 @@ class Thread extends Model
             $thread->replies->each->delete();
         });
 
-        static::addGlobalScope('replyCount',function ($builder){
-            $builder->withCount('replies');
-        });
+//        static::addGlobalScope('replyCount',function ($builder){
+//            $builder->withCount('replies');
+//        });
 
 
 

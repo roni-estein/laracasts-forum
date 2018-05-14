@@ -20,9 +20,11 @@ class ParticipateInForumTest extends DBTestCase
 
         $this->post($thread->path().'/replies', $reply->toArray());
 
-        $this->get($thread->path())
-            ->assertSee($reply->body);
+//     replies are now loaded by vue so we cant see them in a php only load state
+//        $this->get($thread->path())
+//            ->assertSee($reply->body);
 
+        $this->assertDatabaseHas('replies',['body' => $reply->body]);
     }
 
     /** @test */
@@ -76,6 +78,8 @@ class ParticipateInForumTest extends DBTestCase
             ->assertStatus(302);
 
         $this->assertDatabaseMissing('replies',['id' => $reply->id]);
+
+        $this->assertEquals(0, $reply->thread->fresh()->replies_count);
     }
 
     /** @test */

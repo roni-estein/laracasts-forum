@@ -15,6 +15,20 @@ class Reply extends Model
 
     protected $with = ['owner', 'favorites'];
 
+
+    public static function boot()
+    {
+        parent::boot();
+
+        static::deleted(function ($reply){
+            $reply->thread->decrement('replies_count');
+        });
+
+        static::created(function ($reply){
+            $reply->thread->increment('replies_count');
+        });
+    }
+
     /**
      * Get the owner record associated with the User.
      */

@@ -15,8 +15,7 @@ class Seed1 extends Migration
     public function up()
     {
 
-
-        if ( ! app()->environment() === 'testing') {
+        if (app()->environment() === 'local') {
             User::create([
                 'name' => 'Roni Estein',
                 'email' => 'roni.estein@gmail.com',

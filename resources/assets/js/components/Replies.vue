@@ -48,6 +48,8 @@
                 this.dataSet = dataSet;
                 this.items = dataSet.data;
 
+                window.scrollTo(0, 0);
+
             },
 
             url(page) {

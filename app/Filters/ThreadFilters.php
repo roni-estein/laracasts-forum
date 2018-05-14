@@ -10,7 +10,7 @@ use Illuminate\Http\Request;
 
 class ThreadFilters extends Filter
 {
-    protected $filters = ['by', 'popular'];
+    protected $filters = ['by', 'popular', 'unanswered'];
 
     /**
      * @param $builder
@@ -29,5 +29,9 @@ class ThreadFilters extends Filter
         return $this->builder->orderBy('replies_count', 'desc');
     }
 
+    protected function unanswered()
+    {
+        return $this->builder->where('replies_count',0);
+    }
 
 }

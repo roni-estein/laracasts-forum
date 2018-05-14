@@ -35,14 +35,6 @@ class ReadThreadsTest extends DBTestCase
     }
 
     /** @test */
-    public function a_user_can_read_replies_associated_with_a_test()
-    {
-        $reply = create('App\Reply',['thread_id' => $this->thread->id]);
-        $this->get($this->thread->path())
-            ->assertSee($reply->body);
-    }
-
-    /** @test */
     public function a_user_can_filter_threads_according_to_a_channel()
     {
         $channel = create('App\Channel');
@@ -120,17 +112,29 @@ class ReadThreadsTest extends DBTestCase
     }
 
     /** @test */
-    public function a_user_can_request_all_replies_for_a_given_thread()
+    public function a_user_can_filter_threads_by_those_that_are_unanswered()
     {
-        $thread = create('App\Thread');
-        create(Reply::class,['thread_id' => $thread->id], 2);
+        $reply = create('App\Reply');
 
-        $response = $this->getJson($thread->path() .'/replies')->json();
+        $response = $this->getJson('threads?unanswered=1')->json();
 
-        dd($response);
+        $this->assertCount(1, $response);
 
-        $this->assertCount(1,$response['data']);
     }
+
+//TODO check against repo for this one.
+//    /** @test */
+//    public function a_user_can_request_all_replies_for_a_given_thread()
+//    {
+//        $thread = create('App\Thread');
+//        create(Reply::class,['thread_id' => $thread->id], 2);
+//
+//        $response = $this->getJson($thread->path() .'/replies')->json();
+//
+////        dd($response);
+//
+//        $this->assertCount(1,$response['data']);
+//    }
 
 
 }
