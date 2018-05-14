@@ -13,6 +13,9 @@ Route::post('/threads/{channel}/{thread}/replies','RepliesController@store');
 Route::get('/threads/{channel}','ThreadsController@index')->name('threads.show');
 Route::get('/threads/{channel}/{id}','ThreadsController@show')->name('threads.show');
 
+Route::post('/threads/{channel}/{thread}/subscriptions', 'ThreadSubscriptionsController@store')->name('threads.subscribe');
+Route::delete('/threads/{channel}/{thread}/subscriptions', 'ThreadSubscriptionsController@destroy')->name('threads.unsubscribe');
+
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
