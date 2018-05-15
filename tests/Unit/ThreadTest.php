@@ -11,6 +11,7 @@ use Tests\DBTestCase;
 class ThreadTest extends DBTestCase
 {
 
+    protected $thread;
     public function setUp()
     {
         parent::setUp();
@@ -73,5 +74,24 @@ class ThreadTest extends DBTestCase
         $this->assertEquals(0,$thread->subscriptions()->where(['user_id' => auth()->id()])->count());
 
     }
+
+    /** @test */
+    public function it_knows_if_a_user_is_subscribed_to_it()
+    {
+//        $notTheAuthor = create('App\User');
+
+//        dd($this->thread->creator->id);
+        $this->signIn();
+
+        $this->assertFalse($this->thread->isSubscribedTo);
+        $this->thread->subscribe();
+
+        $this->assertTrue($this->thread->isSubscribedTo);
+
+        $this->signIn();
+
+        $this->assertFalse($this->thread->fresh()->isSubscribedTo);
+    }
+
 
 }

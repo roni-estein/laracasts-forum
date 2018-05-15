@@ -44,6 +44,9 @@
                                 by {{ $thread->creator->name }} {{ $thread->created_at->diffForHumans() }} and
                                 has @{{ repliesCount }} {{ str_plural('comment', $thread->replies_count) }}.
                             </div>
+                            <p>
+                                <subscribe-button :active="{{ json_encode($thread->isSubscribedTo)  }}"></subscribe-button>
+                            </p>
                         </div>
                     </div>
                 </div>
