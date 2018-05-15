@@ -30,6 +30,7 @@ class SubscribeToThreadsTest extends DBTestCase
 
     }
 
+
     /** @test */
     public function a_authenticated_user_can_unsubscribe_from_threads()
     {

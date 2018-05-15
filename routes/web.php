@@ -16,6 +16,9 @@ Route::get('/threads/{channel}/{id}','ThreadsController@show')->name('threads.sh
 Route::post('/threads/{channel}/{thread}/subscriptions', 'ThreadSubscriptionsController@store')->name('threads.subscribe');
 Route::delete('/threads/{channel}/{thread}/subscriptions', 'ThreadSubscriptionsController@destroy')->name('threads.unsubscribe');
 
+Route::get('/profiles/{user}/notifications/', 'UserNotificationController@index')->name('notification.unread.list');
+Route::delete('/profiles/{user}/notifications/{notification}', 'UserNotificationController@destroy')->name('notification.unread.read');
+
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
