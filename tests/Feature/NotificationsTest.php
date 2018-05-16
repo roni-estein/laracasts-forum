@@ -46,7 +46,9 @@ class NotificationsTest extends DBTestCase
     {
         create(DatabaseNotification::class);
 
-        $this->assertCount(1, $this->getJson("/profiles/" .auth()->user()->name. "/notifications/")->json());
+        $this->assertCount(
+            1,
+            $this->getJson("/profiles/" .auth()->user()->name. "/notifications/")->json());
     }
 
 

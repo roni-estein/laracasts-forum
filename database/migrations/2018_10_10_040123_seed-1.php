@@ -17,13 +17,18 @@ class Seed1 extends Migration
 
         if (app()->environment() === 'local') {
             User::create([
-                'name' => 'Roni Estein',
-                'email' => 'roni.estein@gmail.com',
+                'name' => 'John Doe',
+                'email' => 'john@doe.com',
                 'password' => bcrypt('secret')
             ]);
 
+            User::create([
+                'name' => 'Jane Doe',
+                'email' => 'jane@doe.com',
+                'password' => bcrypt('secret')
+            ]);
 
-            create('App\User', [], 19);
+            create('App\User', [], 18);
             $users = User::get();
             $channels = create('App\Channel', [], 5);
             $threads = $users->each(function ($user) {
