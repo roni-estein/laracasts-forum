@@ -74,14 +74,7 @@ class Thread extends Model
     {
         $reply =  $this->replies()->create($reply);
 
-        //Prepare Notifications for all subscribers
-
-        //EVENT OPTION
-
-        $this->subscriptions
-            ->where('user_id', '!=', $reply->user_id)
-            ->each
-            ->notify($reply);
+        $this->notifySubscribers($reply);
 
         return $reply;
     }
@@ -119,5 +112,17 @@ class Thread extends Model
     public function getIsSubscribedToAttribute()
     {
         return $this->subscriptions()->where(['user_id'=>auth()->id()])->exists();
+    }
+
+    /**
+     * @param $reply
+     */
+    protected function notifySubscribers($reply)
+    {
+        $this->subscriptions
+            ->where('user_id', '!=', $reply->user_id)
+            ->each
+            ->notify($reply);
+
     }
 }
