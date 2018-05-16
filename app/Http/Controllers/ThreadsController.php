@@ -6,6 +6,7 @@ use App\Channel;
 use App\Filters\ThreadFilters;
 use App\Thread;
 use App\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
@@ -84,7 +85,15 @@ class ThreadsController extends Controller
     public function show($channel_id, $thread_id)
     {
 
+
+
         $thread = Thread::find($thread_id);
+
+        if(auth()->check()){
+
+            auth()->user()->read($thread);
+        }
+
         return view('threads.show')->withThread($thread);
     }
 

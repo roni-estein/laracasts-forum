@@ -6,6 +6,7 @@ use App\Channel;
 use App\Notifications\ThreadWasUpdated;
 use App\Thread;
 use App\User;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Testing\Fakes\NotificationFake;
 use Tests\DBTestCase;
@@ -15,6 +16,7 @@ class ThreadTest extends DBTestCase
 {
 
     protected $thread;
+
     public function setUp()
     {
         parent::setUp();
@@ -43,7 +45,7 @@ class ThreadTest extends DBTestCase
             'user_id' => 1,
         ]);
 
-        $this->assertCount(1,$this->thread->replies);
+        $this->assertCount(1, $this->thread->replies);
     }
 
     /** @test */
@@ -55,7 +57,7 @@ class ThreadTest extends DBTestCase
     /** @test */
     public function a_thread_can_make_a_string_path()
     {
-        $this->assertEquals("/threads/{$this->thread->channel->slug}/{$this->thread->id}",$this->thread->path());
+        $this->assertEquals("/threads/{$this->thread->channel->slug}/{$this->thread->id}", $this->thread->path());
     }
 
     /** @test */
@@ -70,11 +72,11 @@ class ThreadTest extends DBTestCase
 
         // we should be able to get all the threads he user has subscribed to
 
-        $this->assertEquals(1,$thread->subscriptions()->where(['user_id' => auth()->id()])->count());
+        $this->assertEquals(1, $thread->subscriptions()->where(['user_id' => auth()->id()])->count());
 
         $thread->unsubscribe($userId = auth()->id());
 
-        $this->assertEquals(0,$thread->subscriptions()->where(['user_id' => auth()->id()])->count());
+        $this->assertEquals(0, $thread->subscriptions()->where(['user_id' => auth()->id()])->count());
 
     }
 
@@ -112,5 +114,27 @@ class ThreadTest extends DBTestCase
 
         Notification::assertSentTo(auth()->user(), ThreadWasUpdated::class);
     }
+
+    /** @test */
+    public function a_thread_can_check_if_the_authenticated_user_has_read_all_replies()
+    {
+        $this->signIn();
+
+        $thread = create('App\Thread');
+
+        // a laracasts thing, I don't like this but to get away from using so many auth()->user() calls
+        tap(auth()->user(), function ($user) use ($thread) {
+
+            $this->assertTrue($thread->hasUpdatesFor($user));
+            //simulate that the user visited the thread
+            $user->read($thread);
+
+            $this->assertFalse($thread->hasUpdatesFor($user));
+
+        });
+
+
+    }
+
 
 }

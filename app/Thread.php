@@ -3,6 +3,7 @@
 namespace App;
 
 use App\Notifications\ThreadWasUpdated;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 
 class Thread extends Model
@@ -123,6 +124,18 @@ class Thread extends Model
             ->where('user_id', '!=', $reply->user_id)
             ->each
             ->notify($reply);
+
+    }
+
+    public function hasUpdatesFor($user = null)
+    {
+
+        $user = $user ?: auth()->user();
+        //Look in cache for proper key
+        $key = $user->visitedThreadCacheKey($this->id);
+
+        //Compare that carbon instance with the last updated timestamp for the thread
+        return $this->updated_at > cache($key);
 
     }
 }
