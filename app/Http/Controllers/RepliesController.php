@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Reply;
-use App\Spam;
+use App\Inspections\Spam;
 use App\Thread;
 use Illuminate\Http\Request;
 
