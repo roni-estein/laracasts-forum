@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Reply;
-use App\Inspections\Spam;
 use App\Thread;
 use Illuminate\Http\Request;
 
@@ -27,19 +26,15 @@ class RepliesController extends Controller
      * @param  \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
-    public function store($channel_id, Thread $thread, Spam $spam)
+    public function store($channel_id, Thread $thread)
     {
 
-        try {
-            $this->validateReply();
+        $this->validate(request(), ['body' => 'required|spamfree']);
 
-            $reply = $thread->addReply([
-                'body' => request('body'),
-                'user_id' => auth()->id()
-            ]);
-        } catch (\Exception $e) {
-            return response("Sorry your reply can't be posted at this time", 422);
-        }
+        $reply = $thread->addReply([
+            'body' => request('body'),
+            'user_id' => auth()->id()
+        ]);
 
         return $reply->load('owner');
 
@@ -57,27 +52,19 @@ class RepliesController extends Controller
         return back()->with('flash', 'Your reply was removed');
     }
 
-    public function update(Request $request, Reply $reply, Spam $spam)
+    public function update(Request $request, Reply $reply)
     {
         $this->authorize('update', $reply);
 
-        try {
-            $this->validateReply();
+        $this->validate(request(), ['body' => 'required|spamfree']);
 
-            $reply->body = $request->body;
-            $reply->save();
+        $reply->body = $request->body;
+        $reply->save();
 
-        } catch (\Exception $e) {
-            return response("Sorry your reply can't be posted at this time", 422);
-        }
+
         return response(['message' => 'Reply Updated'], 204);
         //return back()->with('flash', 'Reply Updated');
     }
 
-    protected function validateReply()
-    {
-        $this->validate(request(), ['body' => 'required']);
-        resolve(Spam::class)->detect(request('body'));
-    }
 
 }
