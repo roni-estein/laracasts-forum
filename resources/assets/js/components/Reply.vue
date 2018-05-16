@@ -75,7 +75,12 @@
                 axios.patch('/replies/' + this.data.id, {
                     body: this.body,
                 }).catch(error=>{
-                    flash(error.response.data, 'danger');
+                    // console.log(error.response.data.errors.body);
+                    if(error.response.data.errors !== undefined){
+                        flash(error.response.data.errors.body[0], 'danger');
+                    }else{
+                        flash(error.response.data, 'danger');
+                    }
                 }).then(({})=>{
                     this.editing = false;
                     flash('Updated Reply!')

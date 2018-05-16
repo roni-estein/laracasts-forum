@@ -128,5 +128,18 @@ class ParticipateInForumTest extends DBTestCase
 
     }
 
+    /** @test */
+    public function an_authenticated_user_may_reply_a_maximum_of_once_per_minute()
+    {
+        $this->signIn();
+        $thread = create('App\Thread');
+        $reply = make('App\Reply', [
+            'body' => 'A Valid Reply'
+        ]);
+        $this->post($thread->path().'/replies', $reply->toArray())->assertStatus(200);
+        $this->post($thread->path().'/replies', $reply->toArray())->assertStatus(429);
+
+    }
+
 
 }
