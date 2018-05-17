@@ -17,13 +17,13 @@ class Seed1 extends Migration
 
         if (app()->environment() === 'local') {
             User::create([
-                'name' => 'John Doe',
+                'name' => 'JohnDoe',
                 'email' => 'john@doe.com',
                 'password' => bcrypt('secret')
             ]);
 
             User::create([
-                'name' => 'Jane Doe',
+                'name' => 'JaneDoe',
                 'email' => 'jane@doe.com',
                 'password' => bcrypt('secret')
             ]);

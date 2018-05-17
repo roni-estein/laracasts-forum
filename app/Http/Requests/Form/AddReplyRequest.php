@@ -39,9 +39,9 @@ class AddReplyRequest extends FormRequest
 
     public function persist($thread)
     {
-        return $thread->addReply([
-            'body' => request('body'),
-            'user_id' => auth()->id()
-        ])->load('owner');
+//        return $thread->addReply([
+//            'body' => request('body'),
+//            'user_id' => auth()->id()
+//        ])->load('owner');
     }
 }
