@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\Form\AddReplyRequest;
 use App\Reply;
 use App\Thread;
 use Illuminate\Http\Request;
@@ -26,20 +27,9 @@ class RepliesController extends Controller
      * @param  \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
-    public function store($channel_id, Thread $thread)
+    public function store($channel_id, Thread $thread, AddReplyRequest $form)
     {
-        if(\Gate::denies('create', new Reply)){
-            return response('You are posting too frequently, please take a break', 429);
-        }
-        $this->validate(request(), ['body' => 'required|spamfree']);
-
-        $reply = $thread->addReply([
-            'body' => request('body'),
-            'user_id' => auth()->id()
-        ]);
-
-        return $reply->load('owner');
-
+        return $form->persist($thread);
     }
 
     public function destroy(Reply $reply)
