@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Events\ThreadReceivedNewReply;
 use App\Notifications\ThreadWasUpdated;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
@@ -75,7 +76,7 @@ class Thread extends Model
     {
         $reply =  $this->replies()->create($reply);
 
-        $this->notifySubscribers($reply);
+        event( new ThreadReceivedNewReply($reply) );
 
         return $reply;
     }
@@ -113,18 +114,6 @@ class Thread extends Model
     public function getIsSubscribedToAttribute()
     {
         return $this->subscriptions()->where(['user_id'=>auth()->id()])->exists();
-    }
-
-    /**
-     * @param $reply
-     */
-    protected function notifySubscribers($reply)
-    {
-        $this->subscriptions
-            ->where('user_id', '!=', $reply->user_id)
-            ->each
-            ->notify($reply);
-
     }
 
     public function hasUpdatesFor($user = null)

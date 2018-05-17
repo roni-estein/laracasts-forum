@@ -28,4 +28,19 @@ class ReplyTest extends DBTestCase
 
     }
 
+    /** @test */
+    public function it_can_detect_all_mentioned_users_in_the_reply_body()
+    {
+        $reply = make('App\Reply',[
+            'body' => '@JohnDoe is cool, but @JaneDoe is cooler',
+        ]);
+
+        $this->assertArraySubset(['JohnDoe', 'JaneDoe'],$reply->mentionedUsers());
+
+        preg_match_all('/\@([^\s\.]+)/', $reply->body,$matches);
+        $names = $matches[1];
+
+    }
+
+
 }
