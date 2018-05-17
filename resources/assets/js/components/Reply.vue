@@ -16,11 +16,13 @@
         </div>
         <div class="panel-body">
             <div v-if="editing">
-                <div class="form-group">
-                    <textarea class="form-control" v-model="body"></textarea>
-                </div>
-                <button class="btn btn-xs btn-primary" @click="update">Update</button>
-                <button class="btn btn-xs btn-link" @click="editing=false">Cancel</button>
+                <form @submit.prevent="update">
+                    <div class="form-group">
+                        <textarea class="form-control" v-model="body" required></textarea>
+                    </div>
+                    <button class="btn btn-xs btn-primary">Update</button>
+                    <button class="btn btn-xs btn-link" @click="editing=false" type="button">Cancel</button>
+                </form>
             </div>
             <div v-else>
                 <div class="body" v-text="body"></div>
@@ -59,7 +61,7 @@
         computed: {
 
             ago() {
-                return moment(this.data.created_at).subtract(5,'hours').fromNow() + '...';
+                return moment(this.data.created_at).subtract(5, 'hours').fromNow() + '...';
             },
 
             signedIn() {
@@ -67,21 +69,21 @@
             },
 
             canUpdate() {
-                return this.authorize( user => this.data.user_id == user.id )
+                return this.authorize(user => this.data.user_id == user.id)
             }
         },
         methods: {
             update() {
                 axios.patch('/replies/' + this.data.id, {
                     body: this.body,
-                }).catch(error=>{
+                }).catch(error => {
                     // console.log(error.response.data.errors.body);
-                    if(error.response.data.errors !== undefined){
+                    if (error.response.data.errors !== undefined) {
                         flash(error.response.data.errors.body[0], 'danger');
-                    }else{
+                    } else {
                         flash(error.response.data, 'danger');
                     }
-                }).then(({})=>{
+                }).then(({}) => {
                     this.editing = false;
                     flash('Updated Reply!')
                 });
