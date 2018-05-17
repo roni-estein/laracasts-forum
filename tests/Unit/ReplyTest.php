@@ -42,5 +42,17 @@ class ReplyTest extends DBTestCase
 
     }
 
+    /** @test */
+    public function it_wraps_mentioned_usernames_in_the_body_with_anchor_text()
+    {
+        $reply = make('App\Reply',[
+            'body' => 'Hello @JaneDoe.',
+        ]);
+
+        $this->assertEquals('Hello <a href="/profiles/JaneDoe">@JaneDoe</a>.', $reply->body);
+
+
+    }
+
 
 }
