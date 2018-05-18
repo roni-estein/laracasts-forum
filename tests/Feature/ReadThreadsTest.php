@@ -83,7 +83,11 @@ class ReadThreadsTest extends DBTestCase
         $response = $this->getJson('threads/?popular=1')->json();
         // they should be returned in order from most to least replies
 
-        $this->assertEquals([ 3, 2, 0] , array_column($response, 'replies_count'));
+        //This used to work but with pagination we moved the actual threads to a data
+        //component as the pagination takes over the root element
+        //$this->assertEquals([ 3, 2, 0] , array_column($response, 'replies_count'));
+        //NEW
+        $this->assertEquals([ 3, 2, 0] , array_column($response['data'], 'replies_count'));
     }
 
 
@@ -118,7 +122,7 @@ class ReadThreadsTest extends DBTestCase
 
         $response = $this->getJson('threads?unanswered=1')->json();
 
-        $this->assertCount(1, $response);
+        $this->assertCount(1, $response['data']);
 
     }
 
