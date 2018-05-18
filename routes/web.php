@@ -32,3 +32,5 @@ Route::delete('/threads/{channel}/{thread}', 'ThreadsController@destroy');
 Route::patch('/replies/{reply}', 'RepliesController@update');
 Route::delete('/replies/{reply}', 'RepliesController@destroy');
 
+Route::get('/api/users','Api\UsersController@index')->name('user.search');
+

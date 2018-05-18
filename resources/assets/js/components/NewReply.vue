@@ -3,7 +3,13 @@
         <div v-if="signedIn">
 
             <div class="form-group">
-                <textarea v-model="body" class="form-control" placeholder="Have something to say?" rows="5" required></textarea>
+                <textarea v-model="body"
+                          name="body"
+                          id="body"
+                          class="form-control"
+                          placeholder="Have something to say?"
+                          rows="5"
+                          required></textarea>
             </div>
             <button class="btn bt-primary" @click="addReply">Post</button>
 
@@ -17,6 +23,8 @@
 
 <script>
 
+    import 'jquery.caret';
+    import 'at.js';
     export default {
         // props: ['endpoint'],
 
@@ -34,6 +42,21 @@
             endpoint(){
                 return location.pathname + '/replies'
             }
+        },
+
+        mounted(){
+            $('#body').atwho({
+                at: "@",
+                delay: 750,
+                callbacks:{
+                    remoteFilter: function(query, callback){
+                        console.log('CALLED');
+                        $.getJSON("/api/users", {name: query}, function(usernames){
+                           callback(usernames)
+                        });
+                    }
+                }
+            });
         },
 
         methods: {

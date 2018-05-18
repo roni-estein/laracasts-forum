@@ -13,6 +13,8 @@
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
 
+    @yield('page-specific-css')
+    
     <script>
         window.App = {!! json_encode([
             'signedIn' => Auth::check(),
