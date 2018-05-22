@@ -33,4 +33,5 @@ Route::patch('/replies/{reply}', 'RepliesController@update');
 Route::delete('/replies/{reply}', 'RepliesController@destroy');
 
 Route::get('/api/users','Api\UsersController@index')->name('user.search');
+Route::post('/api/users/{user}/avatar','Api\UserAvatarController@store');
 
