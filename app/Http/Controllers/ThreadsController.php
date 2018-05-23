@@ -9,6 +9,7 @@ use App\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Redis;
 
 /**
  * Class ThreadController
@@ -39,7 +40,9 @@ class ThreadsController extends Controller
             return $threads;
         }
 
-        return view('threads.index')->withThreads($threads);
+        $trending = array_map('json_decode',Redis::zrevrange('trending_threads', 0, 4));
+
+        return view('threads.index')->withThreads($threads)->withTrending($trending);
     }
 
     /**
@@ -94,6 +97,12 @@ class ThreadsController extends Controller
 
             auth()->user()->read($thread);
         }
+
+         Redis::zincrby('trending_threads', 1, json_encode([
+            'title' => $thread->title,
+            'path' => $thread->path(),
+
+        ]));
 
         return view('threads.show')->withThread($thread);
     }
