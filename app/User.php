@@ -63,8 +63,8 @@ class User extends Authenticatable
         return $this->hasOne('App\Reply')->latest();
     }
 
-    public function avatar()
+    public function getAvatarPathAttribute($avatar)
     {
-        return asset($this->avatar_path ?? '/avatars/me.jpg');
+        return asset($avatar ?? '/images/avatars/generic-avatar.png');
     }
 }

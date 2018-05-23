@@ -23,11 +23,11 @@ class UserTest extends DBTestCase
     /** @test */
     public function a_user_can_determine_their_avatar_path()
     {
-        $user = create('App\User', ['avatar_path' => '/avatars/me-test.jpg']);
-        $this->assertEquals(asset('/avatars/me-test.jpg'), $user->avatar());
+        $userWithoutAvatar = create('App\User');
+        $this->assertEquals(asset('images/avatars/generic-avatar.png'), $userWithoutAvatar->avatar_path);
 
-        $user2 = create('App\User');
-        $this->assertEquals(asset('/avatars/me-test.jpg'), $user->avatar());
+        $userWithAvatar = create('App\User',['avatar_path' => '/avatars/my-avatar.jpg']);
+        $this->assertEquals(asset('/avatars/my-avatar.jpg'), $userWithAvatar->avatar_path);
     }
 
 

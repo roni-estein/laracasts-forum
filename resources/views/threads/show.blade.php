@@ -15,7 +15,7 @@
                         <div class="panel-heading">
                             <div class="level">
                             <span class="flex">
-                                <img src="{{ $thread->creator->avatar() }}" width="25" class="mr-1">
+                                <img src="{{ $thread->creator->avatar_path }}" width="25" class="mr-1">
                                 <a href="{{ route('profile', $thread->creator) }}">{{ $thread->creator->name }}</a> posted:
                                 {{$thread->title}}
                             </span>

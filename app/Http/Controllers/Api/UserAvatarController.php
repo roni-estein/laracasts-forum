@@ -24,8 +24,8 @@ class UserAvatarController extends Controller
         ]);
 
 
+        return response(['message'=>'ok'],  204);
 
-        return back();
     }
 
 }
