@@ -27,6 +27,15 @@ class CreateThreadsTest extends DBTestCase
     }
 
     /** @test */
+    public function authenticated_users_must_first_confirm_their_email_address_before_creating_theads()
+    {
+
+        $this->publishThread()->assertRedirect('/threads')->assertSessionHas('flash', 'You must confirm your email address.');
+
+    }
+
+
+    /** @test */
     public function an_authenticated_user_can_create_new_form_threads()
     {
         //given a singed in user
@@ -130,12 +139,16 @@ class CreateThreadsTest extends DBTestCase
 
     }
 
-//    /** @test */
-//    public function threads_may_only_be_deleted_by_those_who_have_permission()
-//    {
-//      TODO:
-//    }
+    /** @test */
+    public function threads_may_only_be_deleted_by_those_who_have_permission()
+    {
 
+        $thread = create('App\Thread');
+
+        $this->expectException('Illuminate\Auth\AuthenticationException');
+        $this->json('DELETE', $thread->path());
+
+    }
 
     private function publishThread($overrides = [])
     {

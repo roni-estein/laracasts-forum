@@ -25,6 +25,8 @@ class ThreadsController extends Controller
     public function __construct()
     {
         $this->middleware('auth')->except(['index', 'show']);
+        $this->middleware('must-be-confirmed')->only(['store']);
+
         $this->trending = new Trending;
     }
 
@@ -63,6 +65,7 @@ class ThreadsController extends Controller
      */
     public function store(Request $request)
     {
+
         $this->validate($request, [
             'title' => 'required|spamfree',
             'body' => 'required|spamfree',
@@ -80,7 +83,7 @@ class ThreadsController extends Controller
         return redirect($thread->path())->with('flash','Your thread has been published!');
     }
 
-    /**
+    /**cr
      * Display the specified resource.
      *
      * @param  int $id
@@ -88,7 +91,6 @@ class ThreadsController extends Controller
      */
     public function show($channel_id, $thread_id)
     {
-
         $thread = Thread::find($thread_id);
 
         if(auth()->check()){
