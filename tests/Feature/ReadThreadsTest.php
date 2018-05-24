@@ -126,19 +126,15 @@ class ReadThreadsTest extends DBTestCase
 
     }
 
-//TODO check against repo for this one.
-//    /** @test */
-//    public function a_user_can_request_all_replies_for_a_given_thread()
-//    {
-//        $thread = create('App\Thread');
-//        create(Reply::class,['thread_id' => $thread->id], 2);
-//
-//        $response = $this->getJson($thread->path() .'/replies')->json();
-//
-////        dd($response);
-//
-//        $this->assertCount(1,$response['data']);
-//    }
+    /** @test */
+    public function we_record_a_new_visit_each_time_a_thread_is_read()
+    {
+        $thread = create('App\Thread');
+        $this->assertEquals(0, $thread->visits);
+
+        $this->call('GET', $thread->path());
+        $this->assertEquals(1, $thread->fresh()->visits);
+}
 
 
 }
