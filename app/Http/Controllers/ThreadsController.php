@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Channel;
 use App\Filters\ThreadFilters;
 use App\Thread;
+use App\Trending;
 use App\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -17,12 +18,14 @@ use Illuminate\Support\Facades\Redis;
  */
 class ThreadsController extends Controller
 {
+    protected $trending;
     /**
      * ThreadController constructor.
      */
     public function __construct()
     {
         $this->middleware('auth')->except(['index', 'show']);
+        $this->trending = new Trending;
     }
 
 
@@ -39,10 +42,7 @@ class ThreadsController extends Controller
         if( request()->wantsJson()){
             return $threads;
         }
-
-        $trending = array_map('json_decode',Redis::zrevrange('trending_threads', 0, 4));
-
-        return view('threads.index')->withThreads($threads)->withTrending($trending);
+        return view('threads.index')->withThreads($threads)->withTrending($this->trending->get());
     }
 
     /**
@@ -89,20 +89,13 @@ class ThreadsController extends Controller
     public function show($channel_id, $thread_id)
     {
 
-
-
         $thread = Thread::find($thread_id);
 
         if(auth()->check()){
-
             auth()->user()->read($thread);
         }
 
-         Redis::zincrby('trending_threads', 1, json_encode([
-            'title' => $thread->title,
-            'path' => $thread->path(),
-
-        ]));
+        $this->trending->push($thread);
 
         return view('threads.show')->withThread($thread);
     }
