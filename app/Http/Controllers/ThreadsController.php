@@ -80,7 +80,7 @@ class ThreadsController extends Controller
 
         $thread = Thread::create([
             'title' => $request->title,
-            'slug' => str_slug($request->title),
+            'slug' => $request->title, //use custom mutator
             'channel_id' => $request->channel_id,
             'body' => $request->body,
             'user_id' => auth()->id()

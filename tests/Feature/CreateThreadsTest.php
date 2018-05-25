@@ -104,6 +104,26 @@ class CreateThreadsTest extends DBTestCase
     }
 
     /** @test */
+    public function a_thread_requires_a_unique_slug()
+    {
+
+        $this->signIn();
+        $thread = create('App\Thread', ['title' => 'Foo Title', 'slug' => 'foo-title']);
+
+        $this->post('/threads', $thread->toArray());
+        $this->post('/threads', $thread->toArray());
+
+        $this->assertDatabaseHas('threads', ['slug' => 'foo-title']);
+        $this->assertDatabaseHas('threads', ['slug' => 'foo-title-2']);
+
+//        $thread2 = create('App\Thread', ['title' => 'Foo Title', 'slug' => 'foo-title-9']);
+//        $this->post('/threads', $thread2->toArray());
+//        $this->assertDatabaseHas('threads', ['slug' => 'foo-title-9']);
+//        $this->assertDatabaseHas('threads', ['slug' => 'foo-title-10']);
+    }
+
+
+    /** @test */
     public function a_guest_cannnot_delete_a_thread()
     {
         $this->withExceptionHandling();

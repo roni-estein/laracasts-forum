@@ -17,6 +17,7 @@ class Thread extends Model
     protected $with = ['creator', 'channel'];
 
     protected $appends = ['isSubscribedTo'];
+
     public static function boot()
     {
         parent::boot();
@@ -24,7 +25,7 @@ class Thread extends Model
         //thread always deletes its replies when being deleted.
         //use the each higher order function because each reply must be triggered on the model
         //to cascade to replies. Better use case would be DB cascade deleting.
-        static::deleting(function ($thread){
+        static::deleting(function ($thread) {
             $thread->replies->each->delete();
         });
 
@@ -33,14 +34,11 @@ class Thread extends Model
 //        });
 
 
-
-
-
 //        static::addGlobalScope('creator',function ($builder){
 //            $builder->with('creator');
 //        });
     }
-    
+
     public function path()
     {
         return "/threads/{$this->channel->slug}/{$this->slug}";
@@ -72,9 +70,9 @@ class Thread extends Model
 
     public function addReply($reply)
     {
-        $reply =  $this->replies()->create($reply);
+        $reply = $this->replies()->create($reply);
 
-        event( new ThreadReceivedNewReply($reply) );
+        event(new ThreadReceivedNewReply($reply));
 
         return $reply;
     }
@@ -95,7 +93,7 @@ class Thread extends Model
 
     public function unsubscribe($userId = null)
     {
-        $this->subscriptions()->delete ([
+        $this->subscriptions()->delete([
             'user_id' => $userId ?: auth()->id(),
         ]);
     }
@@ -108,10 +106,10 @@ class Thread extends Model
     {
         return $this->hasMany('App\ThreadSubscription');
     }
-    
+
     public function getIsSubscribedToAttribute()
     {
-        return $this->subscriptions()->where(['user_id'=>auth()->id()])->exists();
+        return $this->subscriptions()->where(['user_id' => auth()->id()])->exists();
     }
 
     public function hasUpdatesFor($user = null)
@@ -129,5 +127,30 @@ class Thread extends Model
     public function getRouteKeyName()
     {
         return 'slug';
+    }
+
+    public function setSlugAttribute($title)
+    {
+        if (static::whereSlug($slug = str_slug($title))->exists()) {
+
+            $slug = $this->incrementSlug($slug);
+        }
+
+        $this->attributes['slug'] = $slug;
+    }
+
+    protected function incrementSlug($slug)
+    {
+        $max = static::whereTitle($this->title)->latest('id')->value('slug');
+
+        if ( is_numeric($max[-1]) ){
+
+            return preg_replace_callback('/(\d+)$/', function($matches){
+               return $matches[1] + 1;
+            }, $max);
+        }
+
+        //if there was no number at the end of the of the slug (the first duplicate slug)
+        return "{$slug}-2";
     }
 }

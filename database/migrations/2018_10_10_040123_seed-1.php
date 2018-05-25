@@ -19,16 +19,25 @@ class Seed1 extends Migration
             User::create([
                 'name' => 'JohnDoe',
                 'email' => 'john@doe.com',
-                'password' => bcrypt('secret')
+                'password' => bcrypt('secret'),
+                'confirmed' => 1,
             ]);
 
             User::create([
                 'name' => 'JaneDoe',
                 'email' => 'jane@doe.com',
-                'password' => bcrypt('secret')
+                'password' => bcrypt('secret'),
+                'confirmed' => 1,
             ]);
 
-            create('App\User', [], 18);
+            User::create([
+                'name' => 'BobDoe',
+                'email' => 'bob@doe.com',
+                'password' => bcrypt('secret'),
+                'confirmed' => 0,
+            ]);
+
+            create('App\User', [], 17);
             $users = User::get();
             $channels = create('App\Channel', [], 5);
             $threads = $users->each(function ($user) {
