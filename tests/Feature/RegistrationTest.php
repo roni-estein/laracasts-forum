@@ -48,6 +48,7 @@ class RegistrationTest extends DBTestCase
             ->assertSessionHas('flash', 'Your account has been confirmed!');
 
         $this->assertTrue($john->fresh()->confirmed);
+        $this->assertNull($john->fresh()->confirmation_token);
 
     }
 

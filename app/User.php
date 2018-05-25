@@ -75,6 +75,7 @@ class User extends Authenticatable
     {
         if ($token == $this->confirmation_token){
            $this->confirmed = true;
+           $this->confirmation_token = null;
            $this->save();
         }
 
