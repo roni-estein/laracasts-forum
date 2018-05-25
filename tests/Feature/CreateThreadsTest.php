@@ -116,10 +116,10 @@ class CreateThreadsTest extends DBTestCase
         $this->assertDatabaseHas('threads', ['slug' => 'foo-title']);
         $this->assertDatabaseHas('threads', ['slug' => 'foo-title-2']);
 
-//        $thread2 = create('App\Thread', ['title' => 'Foo Title', 'slug' => 'foo-title-9']);
-//        $this->post('/threads', $thread2->toArray());
-//        $this->assertDatabaseHas('threads', ['slug' => 'foo-title-9']);
-//        $this->assertDatabaseHas('threads', ['slug' => 'foo-title-10']);
+        $thread2 = create('App\Thread', ['title' => 'Foo Title', 'slug' => 'foo-title-9']);
+        $this->post('/threads', $thread2->toArray());
+        $this->assertDatabaseHas('threads', ['slug' => 'foo-title-9']);
+        $this->assertDatabaseHas('threads', ['slug' => 'foo-title-10']);
     }
 
 
