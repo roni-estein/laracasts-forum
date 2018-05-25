@@ -18,6 +18,9 @@ use Illuminate\Support\Facades\Redis;
  */
 class ThreadsController extends Controller
 {
+    /**
+     * @var Trending
+     */
     protected $trending;
     /**
      * ThreadController constructor.
@@ -33,6 +36,8 @@ class ThreadsController extends Controller
 
     /**
      * @param Channel $channel
+     * @param ThreadFilters $filters
+     *
      * @return mixed
      */
     public function index(Channel $channel, ThreadFilters $filters)
@@ -75,6 +80,7 @@ class ThreadsController extends Controller
 
         $thread = Thread::create([
             'title' => $request->title,
+            'slug' => str_slug($request->title),
             'channel_id' => $request->channel_id,
             'body' => $request->body,
             'user_id' => auth()->id()
@@ -89,9 +95,10 @@ class ThreadsController extends Controller
      * @param  int $id
      * @return Response
      */
-    public function show($channel_id, $thread_id)
+    public function show($channel_id, $slug)
     {
-        $thread = Thread::find($thread_id);
+
+        $thread = Thread::whereSlug($slug)->first();
 
         if(auth()->check()){
             auth()->user()->read($thread);

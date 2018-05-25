@@ -55,6 +55,7 @@ class User extends Authenticatable
 
     public function read($thread)
     {
+//        dd($thread);
         cache()->forever($this->visitedThreadCacheKey($thread->id), Carbon::now());
     }
 

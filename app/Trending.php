@@ -14,6 +14,7 @@ class Trending
 
     public function push($thread)
     {
+//        dd($thread);
         Redis::zincrby(self::cacheKey(), 1, json_encode([
             'title' => $thread->title,
             'path' => $thread->path(),

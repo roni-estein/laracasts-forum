@@ -40,12 +40,10 @@ class Thread extends Model
 //            $builder->with('creator');
 //        });
     }
-
-
     
     public function path()
     {
-        return "/threads/{$this->channel->slug}/{$this->id}";
+        return "/threads/{$this->channel->slug}/{$this->slug}";
     }
 
     /**
@@ -126,5 +124,10 @@ class Thread extends Model
         //Compare that carbon instance with the last updated timestamp for the thread
         return $this->updated_at > cache($key);
 
+    }
+
+    public function getRouteKeyName()
+    {
+        return 'slug';
     }
 }
