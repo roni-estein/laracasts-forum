@@ -32,6 +32,9 @@ class User extends Authenticatable
         'password', 'remember_token','email'
     ];
 
+    protected $casts =[
+      'confirmed' => 'boolean',
+    ];
     /**
      * Get the threads records associated with the User.
      */
@@ -66,5 +69,15 @@ class User extends Authenticatable
     public function getAvatarPathAttribute($avatar)
     {
         return asset($avatar ?? '/images/avatars/generic-avatar.png');
+    }
+
+    public function confirm($token)
+    {
+        if ($token == $this->confirmation_token){
+           $this->confirmed = true;
+           $this->save();
+        }
+
+        return $this;
     }
 }

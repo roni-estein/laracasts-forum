@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+
 use Illuminate\Support\Facades\Event;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
 
@@ -17,6 +18,10 @@ class EventServiceProvider extends ServiceProvider
             'App\Listeners\NotifyMentionedUsers',
             'App\Listeners\NotifySubscribers',
         ],
+        'Illuminate\Auth\Events\Registered' => [
+            'App\Listeners\SendEmailConfirmationRequest',
+        ],
+
     ];
 
     /**
