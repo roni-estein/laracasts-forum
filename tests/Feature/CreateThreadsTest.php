@@ -108,18 +108,29 @@ class CreateThreadsTest extends DBTestCase
     {
 
         $this->signIn();
-        $thread = create('App\Thread', ['title' => 'Foo Title', 'slug' => 'foo-title']);
+        create('App\Thread',[],2);
+        $thread = create('App\Thread', ['title' => 'Foo Title']);
 
-        $this->post('/threads', $thread->toArray());
-        $this->post('/threads', $thread->toArray());
+        $response = $this->postJson('/threads', $thread->toArray())->json();
 
         $this->assertDatabaseHas('threads', ['slug' => 'foo-title']);
-        $this->assertDatabaseHas('threads', ['slug' => 'foo-title-2']);
+        $this->assertDatabaseHas('threads', ['slug' => 'foo-title-'.$response['id']]);
 
-        $thread2 = create('App\Thread', ['title' => 'Foo Title', 'slug' => 'foo-title-9']);
-        $this->post('/threads', $thread2->toArray());
-        $this->assertDatabaseHas('threads', ['slug' => 'foo-title-9']);
-        $this->assertDatabaseHas('threads', ['slug' => 'foo-title-10']);
+    }
+
+    /** @test */
+    public function a_thread_with_a_title_that_ends_in_a_number_should_create_the_proper_slug()
+    {
+        $this->signIn();
+
+        $thread = create('App\Thread', ['title' => 'Some Title 24']);
+
+        $response = $this->postJson('/threads', $thread->toArray())->json();
+
+
+        $this->assertDatabaseHas('threads', ['slug' => 'some-title-24']);
+        $this->assertDatabaseHas('threads', ['slug' => 'some-title-24-'.$response['id']]);
+
     }
 
 

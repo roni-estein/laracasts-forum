@@ -29,6 +29,11 @@ class Thread extends Model
             $thread->replies->each->delete();
         });
 
+        static::created(function ($thread) {
+            $thread->update(['slug' => $thread->title]);
+        });
+
+
 //        static::addGlobalScope('replyCount',function ($builder){
 //            $builder->withCount('replies');
 //        });
@@ -129,28 +134,15 @@ class Thread extends Model
         return 'slug';
     }
 
-    public function setSlugAttribute($title)
+    public function setSlugAttribute($slug)
     {
-        if (static::whereSlug($slug = str_slug($title))->exists()) {
 
-            $slug = $this->incrementSlug($slug);
+        $slug = str_slug($slug);
+
+        if (static::whereSlug($slug)->exists()) {
+            $slug = $slug . '-' . $this->id;
         }
 
         $this->attributes['slug'] = $slug;
-    }
-
-    protected function incrementSlug($slug)
-    {
-        $max = static::whereTitle($this->title)->latest('id')->value('slug');
-
-        if ( is_numeric($max[-1]) ){
-
-            return preg_replace_callback('/(\d+)$/', function($matches){
-               return $matches[1] + 1;
-            }, $max);
-        }
-
-        //if there was no number at the end of the of the slug (the first duplicate slug)
-        return "{$slug}-2";
     }
 }
