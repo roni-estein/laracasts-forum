@@ -16,6 +16,7 @@
 /.vagrant
 /public/img/blog/*
 
+disable-xdebug.ini
 Homestead.json
 Homestead.yaml
 npm-debug.log

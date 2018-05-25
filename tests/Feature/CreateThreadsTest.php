@@ -30,7 +30,13 @@ class CreateThreadsTest extends DBTestCase
     public function authenticated_users_must_first_confirm_their_email_address_before_creating_theads()
     {
 
-        $this->publishThread()->assertRedirect('/threads')->assertSessionHas('flash', 'You must confirm your email address.');
+        $user = factory('App\User')->states('unconfirmed')->create();
+        $this->signIn($user);
+        $thread = make('App\Thread', ['user_id' => $user->id]);
+
+        $this->post('/threads', $thread->toArray())
+            ->assertRedirect('/threads')
+            ->assertSessionHas('flash', 'You must confirm your email address.');
 
     }
 
