@@ -104,7 +104,7 @@ class CreateThreadsTest extends DBTestCase
     }
 
     /** @test */
-    public function a_thread_requires_a_unique_slug()
+        public function a_thread_requires_a_unique_slug()
     {
 
         $this->signIn();
