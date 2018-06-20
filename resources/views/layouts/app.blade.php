@@ -38,6 +38,10 @@
         .mr-1{
             margin-right: 1em;
         }
+
+        .ml-auto {
+            margin-left: auto;
+        }
         [v-vcloak] { display: none}
 
     </style>

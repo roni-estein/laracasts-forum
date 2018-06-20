@@ -16,25 +16,26 @@ class Seed1 extends Migration
     {
 
         if (app()->environment() === 'local') {
-            User::create([
+            create('App\User',[
                 'name' => 'JohnDoe',
                 'email' => 'john@doe.com',
                 'password' => bcrypt('secret'),
-                'confirmed' => 1,
+                'remember_token' => null
             ]);
 
-            User::create([
+            create('App\User',[
                 'name' => 'JaneDoe',
                 'email' => 'jane@doe.com',
                 'password' => bcrypt('secret'),
-                'confirmed' => 1,
+                'remember_token' => null
             ]);
 
-            User::create([
+            create('App\User',[
                 'name' => 'BobDoe',
                 'email' => 'bob@doe.com',
                 'password' => bcrypt('secret'),
-                'confirmed' => 0,
+                'remember_token' => null,
+                'confirmed' => false
             ]);
 
             create('App\User', [], 17);
