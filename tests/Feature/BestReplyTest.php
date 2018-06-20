@@ -18,6 +18,7 @@ class BestReplyTest extends DBTestCase
         $this->postJson(route('replies.best.store',['reply' => $replies[1]]));
 
         $this->assertTrue($replies[1]->fresh()->isBest());
+        $this->assertFalse($replies[0]->isBest());
     }
 
     /** @test */
