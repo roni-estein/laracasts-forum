@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use Illuminate\Support\Facades\DB;
 use Tests\DBTestCase;
 
 class BestReplyTest extends DBTestCase
@@ -37,6 +38,20 @@ class BestReplyTest extends DBTestCase
 
         $this->assertFalse($replies[1]->fresh()->isBest());
 
+    }
+
+    /** @test */
+    public function if_a_best_reply_is_deleted_the_thread_is_updated_to_reflect_that()
+    {
+
+        $this->signIn();
+        $reply = create('App\Reply', ['user_id' => auth()->id()]);
+        $reply->thread->markBestReply($reply);
+
+        //delete the best reply
+        $this->deleteJson(route('replies.destroy', ['reply' => $reply]));
+
+        $this->assertNull($reply->thread->fresh()->best_reply_id);
     }
 
 

@@ -15,7 +15,7 @@
 
 
         </div>
-        <div class="text-center">Please <a href="/login">Sign In</a> to participate</div>
+        <div v-else="signedIn" class="text-center">Please <a href="/login">Sign In</a> to participate</div>
     </div>
 
 

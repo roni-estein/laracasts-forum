@@ -31,7 +31,7 @@ Route::get('profiles/{user}','ProfilesController@show')->name('profile');
 
 Route::delete('/threads/{channel}/{thread}', 'ThreadsController@destroy');
 Route::patch('/replies/{reply}', 'RepliesController@update');
-Route::delete('/replies/{reply}', 'RepliesController@destroy');
+Route::delete('/replies/{reply}', 'RepliesController@destroy')->name('replies.destroy');
 
 Route::get('/api/users','Api\UsersController@index')->name('user.search');
 Route::post('/api/users/{user}/avatar','Api\UserAvatarController@store')->name('avatar');
