@@ -35,9 +35,6 @@
         },
 
         computed: {
-            signedIn() {
-                return window.App.signedIn;
-            },
 
             endpoint(){
                 return location.pathname + '/replies'
