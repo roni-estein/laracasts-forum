@@ -18,5 +18,6 @@ $factory->define(App\Thread::class, function (Faker $faker) {
         'title' => $title,
         'slug' => str_slug($title),
         'body' => $faker->paragraph,
+        'locked' => false,
     ];
 });

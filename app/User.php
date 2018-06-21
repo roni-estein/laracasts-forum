@@ -35,6 +35,11 @@ class User extends Authenticatable
     protected $casts =[
       'confirmed' => 'boolean',
     ];
+
+    public function isAdmin()
+    {
+        return in_array($this->name, ['John Doe', 'Jane Doe']);
+    }
     /**
      * Get the threads records associated with the User.
      */

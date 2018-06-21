@@ -26,3 +26,7 @@ $factory->define(App\User::class, function (Faker $faker) {
 $factory->state(App\User::class, 'unconfirmed', function (){
    return ['confirmed' => false];
 });
+
+$factory->state(App\User::class, 'administrator', function (){
+    return ['name' => 'John Doe'];
+});
