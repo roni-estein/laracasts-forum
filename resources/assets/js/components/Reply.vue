@@ -3,13 +3,13 @@
         <div class="panel-heading">
             <div class="level">
                 <h5 class="flex">
-                    <a :href="'/profiles/'+data.owner.name" v-text="data.owner.name"></a>
+                    <a :href="'/profiles/'+reply.owner.name" v-text="reply.owner.name"></a>
                     said <span v-text="ago"></span>
                 </h5>
 
 
                 <div v-if="signedIn">
-                    <favorite :reply="data"></favorite>
+                    <favorite :reply="reply"></favorite>
                 </div>
 
             </div>
@@ -28,13 +28,18 @@
                 <div class="body" v-html="body"></div>
             </div>
         </div>
-        <!--@can('update',$reply)-->
-        <div class="panel-footer level" v-if="authorize('updateReply', reply)">
-            <button class="btn btn-xs mr-1" @click="editing=true">Edit</button>
-            <button type="submit" class="btn btn-danger btn-xs" @click="destroy">Delete</button>
-            <button type="submit" class="btn btn-default btn-xs ml-auto" @click="markBest" v-show="!isBest">Best Reply</button>
+
+        <div class="panel-footer level" v-if="authorize('owns', reply) || authorize('owns', reply.thread)">
+            <div class="" v-if="authorize('owns', reply)">
+                <button class="btn btn-xs mr-1" @click="editing=true">Edit</button>
+                <button type="submit" class="btn btn-danger btn-xs" @click="destroy">Delete</button>
+            </div>
+
+
+            <button type="submit" class="btn btn-default btn-xs ml-auto" @click="markBest" v-if="authorize('owns', reply.thread)" v-show="!isBest">Best Reply</button>
+
         </div>
-        <!--@endcan-->
+
 
     </div>
 </template>
@@ -45,7 +50,7 @@
 
     export default {
 
-        props: ['data'],
+        props: ['reply'],
 
         components: {
             Favorite
@@ -54,17 +59,17 @@
         data() {
             return {
                 editing: false,
-                id: this.data.id,
-                body: this.data.body,
-                isBest: this.data.isBest,
-                reply: this.data,
+                id: this.reply.id,
+                body: this.reply.body,
+                isBest: this.reply.isBest,
+
             }
         },
 
         computed: {
 
             ago() {
-                return moment(this.data.created_at).subtract(5, 'hours').fromNow() + '...';
+                return moment(this.reply.created_at).subtract(5, 'hours').fromNow() + '...';
             },
 
         },
@@ -101,9 +106,9 @@
             },
 
             destroy() {
-                axios.delete('/replies/' + this.data.id);
+                axios.delete('/replies/' + this.reply.id);
 
-                this.$emit('deleted', this.data.id);
+                this.$emit('deleted', this.reply.id);
 
             },
 
