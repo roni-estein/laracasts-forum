@@ -10,7 +10,11 @@ class LockedThreadsController extends Controller
 
     public function store(Thread $thread)
     {
-        $thread->lock();
-        return response('ok', 201);
+        $thread->update(['locked'=> true]);
+    }
+
+    public function destroy(Thread $thread)
+    {
+        $thread->update(['locked'=> false]);
     }
 }

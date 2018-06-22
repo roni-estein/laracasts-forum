@@ -10,14 +10,16 @@ Route::resource('threads','ThreadsController',['except' =>['destroy','show','upd
 
 Route::get('/threads/{channel}/{thread}/replies','RepliesController@index');
 Route::post('/threads/{channel}/{thread}/replies','RepliesController@store')->name('replies.store');
-Route::get('/threads/{channel}','ThreadsController@index')->name('threads.show');
+Route::get('/threads/{channel}','ThreadsController@index')->name('threads.index');
 Route::get('/threads/{channel}/{id}','ThreadsController@show')->name('threads.show');
+Route::patch('/threads/{channel}/{thread}','ThreadsController@update')->name('threads.update');
 
 Route::post('/threads/{channel}/{thread}/subscriptions', 'ThreadSubscriptionsController@store')->name('threads.subscribe');
 Route::delete('/threads/{channel}/{thread}/subscriptions', 'ThreadSubscriptionsController@destroy')->name('threads.unsubscribe');
 
 
 Route::post('locked-threads/{thread}', 'LockedThreadsController@store')->name('locked-threads.store')->middleware('admin');
+Route::delete('locked-threads/{thread}', 'LockedThreadsController@destroy')->name('locked-threads.destroy')->middleware('admin');
 
 Route::get('/profiles/{user}/notifications/', 'UserNotificationController@index')->name('notification.unread.list');
 Route::delete('/profiles/{user}/notifications/{notification}', 'UserNotificationController@destroy')->name('notification.unread.read');

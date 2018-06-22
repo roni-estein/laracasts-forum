@@ -28,5 +28,5 @@ $factory->state(App\User::class, 'unconfirmed', function (){
 });
 
 $factory->state(App\User::class, 'administrator', function (){
-    return ['name' => 'John Doe'];
+    return ['email' => 'john@doe.com'];
 });

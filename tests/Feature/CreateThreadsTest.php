@@ -23,7 +23,6 @@ class CreateThreadsTest extends DBTestCase
             ->assertRedirect('/login');
 
 
-
     }
 
     /** @test */
@@ -104,17 +103,17 @@ class CreateThreadsTest extends DBTestCase
     }
 
     /** @test */
-        public function a_thread_requires_a_unique_slug()
+    public function a_thread_requires_a_unique_slug()
     {
 
         $this->signIn();
-        create('App\Thread',[],2);
+        create('App\Thread', [], 2);
         $thread = create('App\Thread', ['title' => 'Foo Title']);
 
         $response = $this->postJson('/threads', $thread->toArray())->json();
 
         $this->assertDatabaseHas('threads', ['slug' => 'foo-title']);
-        $this->assertDatabaseHas('threads', ['slug' => 'foo-title-'.$response['id']]);
+        $this->assertDatabaseHas('threads', ['slug' => 'foo-title-' . $response['id']]);
 
     }
 
@@ -129,7 +128,7 @@ class CreateThreadsTest extends DBTestCase
 
 
         $this->assertDatabaseHas('threads', ['slug' => 'some-title-24']);
-        $this->assertDatabaseHas('threads', ['slug' => 'some-title-24-'.$response['id']]);
+        $this->assertDatabaseHas('threads', ['slug' => 'some-title-24-' . $response['id']]);
 
     }
 
@@ -190,7 +189,7 @@ class CreateThreadsTest extends DBTestCase
     private function publishThread($overrides = [])
     {
         $this->withExceptionHandling()->signIn();
-        $thread = make('App\Thread',$overrides);
+        $thread = make('App\Thread', $overrides);
 
         return $this->post('/threads', $thread->toArray());
     }

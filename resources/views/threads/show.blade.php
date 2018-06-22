@@ -6,7 +6,7 @@
 @endsection
 
 @section('content')
-    <thread-view :initial-replies-count="{{ $thread->replies_count }}" inline-template>
+    <thread-view :thread="{{ $thread }}" inline-template>
         <div class="container">
 
             <div class="row">
@@ -50,8 +50,10 @@
                                 by {{ $thread->creator->name }} {{ $thread->created_at->diffForHumans() }} and
                                 has @{{ repliesCount }} {{ str_plural('comment', $thread->replies_count) }}.
                             </div>
-                            <p>
-                                <subscribe-button :active="{{ json_encode($thread->isSubscribedTo)  }}"></subscribe-button>
+                            <p class="level">
+                                <subscribe-button :active="{{ json_encode($thread->isSubscribedTo) }}" v-if="signedIn"></subscribe-button>
+
+                                <button class="btn btn-default" v-if="authorize('isAdmin')" v-text="locked ? 'Unlock' : 'Lock'" @click="toggleLock"></button>
                             </p>
                         </div>
                     </div>

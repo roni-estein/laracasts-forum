@@ -134,19 +134,5 @@ class ThreadTest extends DBTestCase
             $this->assertFalse($thread->hasUpdatesFor($user));
 
         });
-
-
     }
-
-    /** @test */
-    public function a_thread_can_be_locked()
-    {
-        $this->assertFalse($this->thread->locked);
-
-        $this->thread->lock();
-
-        $this->assertTrue($this->thread->locked);
-    }
-
-
 }

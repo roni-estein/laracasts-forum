@@ -71,7 +71,7 @@ class ThreadsController extends Controller
     public function store(Request $request)
     {
 
-        $this->validate($request, [
+        request()->validate([
             'title' => 'required|spamfree',
             'body' => 'required|spamfree',
             'channel_id' => 'required|exists:channels,id',
@@ -92,7 +92,21 @@ class ThreadsController extends Controller
         return redirect($thread->path())->with('flash','Your thread has been published!');
     }
 
-    /**cr
+    public function update(Channel $channel, Thread $thread)
+    {
+        $this->authorize('update', $thread);
+
+        $thread->update(request()->validate([
+        'title' => 'required|spamfree',
+        'body' => 'required|spamfree',
+
+        ]));
+
+        return $thread;
+
+    }
+
+    /**
      * Display the specified resource.
      *
      * @param  int $id
@@ -113,30 +127,16 @@ class ThreadsController extends Controller
         return view('threads.show')->withThread($thread);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int $id
-     * @return Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request $request
-     * @param  int $id
-     * @return Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
+//    /**
+//     * Show the form for editing the specified resource.
+//     *
+//     * @param  int $id
+//     * @return Response
+//     */
+//    public function edit($id)
+//    {
+//        //
+//    }
 
     /**
      * Remove the specified resource from storage.

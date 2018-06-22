@@ -38,7 +38,7 @@ class User extends Authenticatable
 
     public function isAdmin()
     {
-        return in_array($this->name, ['John Doe', 'Jane Doe']);
+        return in_array($this->email, ['john@doe.com']);
     }
     /**
      * Get the threads records associated with the User.
