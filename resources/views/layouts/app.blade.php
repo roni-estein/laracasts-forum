@@ -44,7 +44,9 @@
         }
         [v-vcloak] { display: none}
 
-    </style>
+    </style>'
+
+    @yield('head')
 </head>
 <body>
 <div id="app">

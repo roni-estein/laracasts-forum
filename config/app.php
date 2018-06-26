@@ -108,6 +108,8 @@ return [
 
     'cipher' => 'AES-256-CBC',
 
+    'recaptcha' => env('RECAPTCHA_SECRET'),
+
     /*
     |--------------------------------------------------------------------------
     | Logging Configuration

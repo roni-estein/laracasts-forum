@@ -3,11 +3,24 @@
 namespace Tests\Feature;
 
 use App\Activity;
+use App\Rules\Recaptcha;
 use Tests\DBTestCase;
 
 class CreateThreadsTest extends DBTestCase
 {
 
+    public function setUp()
+    {
+        parent::setUp();
+
+        app()->singleton(Recaptcha::class, function () {
+            $m = \Mockery::mock(Recaptcha::class);
+
+            $m->shouldReceive('passes')->andReturn('true');
+
+            return $m;
+        });
+    }
     /** @test */
     public function guests_may_not_create_new_threads()
     {
@@ -49,7 +62,7 @@ class CreateThreadsTest extends DBTestCase
 
         //when we hit an endpoint to create a new thread
 
-        $response = $this->post('/threads', $thread->toArray());
+        $response = $this->post('/threads', $thread->toArray() + ['g-recaptcha-response' => 'token']);
         //then when we visit the threads page we should see a new thread
 //        dd($response->headers->get('location'));
 
@@ -94,11 +107,11 @@ class CreateThreadsTest extends DBTestCase
 
         create('App\Channel');
 
-        $this->publishThread(['channel_id' => null])
+        $this->publishThread(['channel_id' => null, 'g-recaptcha-response' => 'passing-token'])
             ->assertSessionHasErrors('channel_id');
 
 
-        $this->publishThread(['channel_id' => 999])
+        $this->publishThread(['channel_id' => 999, 'g-recaptcha-response' => 'passing-token'])
             ->assertSessionHasErrors('channel_id');
     }
 
@@ -110,7 +123,7 @@ class CreateThreadsTest extends DBTestCase
         create('App\Thread', [], 2);
         $thread = create('App\Thread', ['title' => 'Foo Title']);
 
-        $response = $this->postJson('/threads', $thread->toArray())->json();
+        $response = $this->postJson('/threads', $thread->toArray() + ['g-recaptcha-response' => 'token'])->json();
 
         $this->assertDatabaseHas('threads', ['slug' => 'foo-title']);
         $this->assertDatabaseHas('threads', ['slug' => 'foo-title-' . $response['id']]);
@@ -124,7 +137,7 @@ class CreateThreadsTest extends DBTestCase
 
         $thread = create('App\Thread', ['title' => 'Some Title 24']);
 
-        $response = $this->postJson('/threads', $thread->toArray())->json();
+        $response = $this->postJson('/threads', $thread->toArray() + ['g-recaptcha-response' => 'token'])->json();
 
 
         $this->assertDatabaseHas('threads', ['slug' => 'some-title-24']);
@@ -172,6 +185,17 @@ class CreateThreadsTest extends DBTestCase
         $this->assertDatabaseMissing('replies', ['id' => $reply->id]);
 
         $this->assertEquals(0, Activity::count());
+
+    }
+
+    /** @test */
+    public function a_thread_requires_recpatcha_verification()
+    {
+
+        unset(app()[Recaptcha::class]);
+
+        $this->publishThread(['g-recaptcha-response' => 'test'])
+            ->assertSessionHasErrors('g-recaptcha-response');
 
     }
 
