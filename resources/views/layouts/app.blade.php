@@ -42,7 +42,7 @@
         .ml-auto {
             margin-left: auto;
         }
-        [v-vcloak] { display: none}
+        [v-cloak] { display: none}
         [v-cloak] .v-cloak--block {
             display: block;
         }

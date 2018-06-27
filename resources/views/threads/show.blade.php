@@ -10,8 +10,10 @@
         <div class="container">
 
             <div class="row">
-                <div class="col-md-8" v-cloak>
-                    @include('threads._question')
+                <div class="col-md-8">
+                    <div v-cloak>
+                        @include('threads._question')
+                    </div>
 
                     <replies @removed="repliesCount--" @created="repliesCount++"></replies>
 

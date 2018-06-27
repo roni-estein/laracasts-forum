@@ -6,7 +6,8 @@ let authorizations = {
     },
 
     isAdmin() {
-        return ['john@doe.com'].includes(user.email);
+        console.log (user.email);
+        return ['JohnDoe'].includes(user.name);
     }
 };
 

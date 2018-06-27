@@ -40,7 +40,15 @@
 
             fetch(page){
                 axios.get(this.url(page))
-                    .then(this.refresh);
+                    .then(this.refresh)
+                    .catch(error=>{
+                        // console.log(error.response.data.errors.body);
+                        if(error.response.data.errors !== undefined){
+                            flash(error.response.data.errors.body[0], 'danger');
+                        }else{
+                            flash(error.response.data, 'danger');
+                        }
+                    });
             },
 
             refresh({data:dataSet}) {

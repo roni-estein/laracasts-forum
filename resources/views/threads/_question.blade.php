@@ -1,19 +1,20 @@
+
 <div class="panel panel-default" v-if="editing">
     <div class="panel-heading">
         <div class="form-group">
-            <input class="form-control" value="{{ $thread->title }}">
+            <input class="form-control" v-model="form.title">
         </div>
     </div>
 
     <div class="panel-body">
         <div class="body ">
-            <textarea rows="10" class="form-control">{{$thread->body}} </textarea>
+            <textarea rows="10" class="form-control" v-model="form.body"></textarea>
         </div>
     </div>
     <div class="panel-footer">
         <div class="level">
-            <button class="btn btn-xs btn-primary mr-1" @click="editing = false">Update</button>
-            <button class="btn btn-xs" @click="editing = false">Cancel</button>
+            <button class="btn btn-xs btn-primary mr-1" @click="update">Update</button>
+            <button class="btn btn-xs" @click="resetForm">Cancel</button>
 
             @can('update', $thread)
                 <form action="{{ $thread->path() }}" method="post" class="ml-auto">
@@ -30,22 +31,21 @@
     </div>
 </div>
 
-<div class="panel panel-default" v-else="editing">
+<div class="panel panel-default" v-if="!editing">
     <div class="panel-heading">
         <div class="level">
             <span class="flex">
                 <img src="{{ $thread->creator->avatar_path }}" width="25" class="mr-1">
-                <a href="{{ route('profile', $thread->creator) }}">{{ $thread->creator->name }}</a> posted:
-                {{$thread->title}}
+                <a href="{{ route('profile', $thread->creator) }}">{{ $thread->creator->name }}</a> posted: <span v-text="title"></span>
             </span>
         </div>
 
     </div>
 
     <div class="panel-body">
-        <div class="body ">{{$thread->body}}</div>
+        <div class="body" v-text="this.body"></div>
     </div>
-    <div class="panel-footer">
+    <div class="panel-footer" v-if="authorize('owns',thread)">
         <button class="btn btn-xs" @click="editing = true">Edit</button>
     </div>
 </div>

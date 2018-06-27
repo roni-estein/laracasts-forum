@@ -3,11 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\Form\AddReplyRequest;
-use App\Notifications\YouWereMentioned;
 use App\Reply;
 use App\Thread;
-use App\User;
-use Illuminate\Http\Request;
+
 
 class RepliesController extends Controller
 {
@@ -33,9 +31,11 @@ class RepliesController extends Controller
     {
 //        return $form->persist($thread);
 
-        if($thread->locked) return response('Thread is locked.', 422);
+        if ($thread->locked) {
+            return response('Thread is locked.', 422);
+        }
 
-        $reply =  $thread->addReply([
+        $reply = $thread->addReply([
             'body' => request('body'),
             'user_id' => auth()->id()
         ]);
@@ -56,13 +56,13 @@ class RepliesController extends Controller
         return back()->with('flash', 'Your reply was removed');
     }
 
-    public function update(Request $request, Reply $reply)
+    public function update(Reply $reply)
     {
         $this->authorize('update', $reply);
 
-        $this->validate(request(), ['body' => 'required|spamfree']);
+        request()->validate(['body' => 'required|spamfree']);
 
-        $reply->body = $request->body;
+        $reply->body = request('body');
         $reply->save();
 
 
