@@ -63,6 +63,7 @@
         .v-cloak--inlineBlock {
             display: none;
         }
+        .ais-highlight em { font-style: normal; background-color: yellow; font-weight: bold}
 
     </style>'
 
