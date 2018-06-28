@@ -139,6 +139,11 @@ class Thread extends Model
         return 'slug';
     }
 
+    public function getPathAttribute()
+    {
+        return $this->path();
+    }
+
     public function setSlugAttribute($slug)
     {
 
@@ -155,6 +160,16 @@ class Thread extends Model
     {
         $this->update(['best_reply_id' => $reply->id]);
         return $this;
+    }
+
+    /**
+     * Get the indexable data array for the model.
+     *
+     * @return array
+     */
+    public function toSearchableArray()
+    {
+        return $this->toArray() + ['path' => $this.$this->path()];
     }
 
 }

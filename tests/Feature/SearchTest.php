@@ -26,5 +26,4 @@ class SearchTest extends DBTestCase
         }while(empty($results));
         $this->assertcount(3, $results);
     }
-
 }

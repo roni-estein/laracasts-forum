@@ -5,6 +5,8 @@ Route::get('/', function () {
     echo phpinfo();
 });
 
+Route::view('/scan', 'scan');
+
 
 Route::resource('threads','ThreadsController',['except' =>['destroy','show','update','edit']]);
 Route::get('/threads/search','SearchController@show')->name('search.show');
