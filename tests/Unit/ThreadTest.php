@@ -135,4 +135,10 @@ class ThreadTest extends DBTestCase
 
         });
     }
+
+    /** @test */
+    public function a_thread_body_is_sanitized_automatically() {
+        $thread = make(Thread::class, ['body' => "<script>alert('bad')</script><p>this is ok</p>"]);
+        $this->assertEquals('<p>this is ok</p>', $thread->body);
+    }
 }

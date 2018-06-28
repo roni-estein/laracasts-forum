@@ -2,6 +2,7 @@
 
 namespace Tests\Unit;
 
+use App\Reply;
 use Carbon\Carbon;
 use Tests\DBTestCase;
 
@@ -65,5 +66,10 @@ class ReplyTest extends DBTestCase
         $this->assertTrue($reply->fresh()->isBest());
     }
 
+    /** @test */
+    public function a_reply_body_is_sanitized_automatically() {
+        $reply = make(Reply::class, ['body' => "<script>alert('bad')</script><p>this is ok</p>"]);
+        $this->assertEquals('<p>this is ok</p>', $reply->body);
+    }
 
 }
