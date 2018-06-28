@@ -2,6 +2,7 @@
 
 @section('head')
     <script src='https://www.google.com/recaptcha/api.js'></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/trix/0.11.3/trix.css">
 @endsection
 
 @section('content')
@@ -30,9 +31,10 @@
                                 <input type="text" class="form-control" id="title" name="title" placeholder="title" value="{{ old('title') }}">
                             </div>
                             <div class="form-group">
-                                <label for="body">Body</label>
-                                <textarea class="form-control" id="body" name="body" rows="8"
-                                          placeholder="body">{{ old('body') }}</textarea>
+                                <wysiwyg name="body"></wysiwyg>
+                                {{--<label for="body">Body</label>--}}
+                                {{--<textarea class="form-control" id="body" name="body" rows="8"--}}
+                                          {{--placeholder="body">{{ old('body') }}</textarea>--}}
                             </div>
 
                             <div class="form-group">

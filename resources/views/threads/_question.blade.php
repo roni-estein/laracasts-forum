@@ -8,7 +8,7 @@
 
     <div class="panel-body">
         <div class="body ">
-            <textarea rows="10" class="form-control" v-model="form.body"></textarea>
+            <wysiwyg name="body" v-model="form.body" :value="form.body"></wysiwyg>
         </div>
     </div>
     <div class="panel-footer">
@@ -43,7 +43,7 @@
     </div>
 
     <div class="panel-body">
-        <div class="body" v-text="this.body"></div>
+        <div class="body" v-html="this.body"></div>
     </div>
     <div class="panel-footer" v-if="authorize('owns',thread)">
         <button class="btn btn-xs" @click="editing = true">Edit</button>

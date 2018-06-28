@@ -3,6 +3,7 @@
 
 @section('page-specific-css')
     <link href="{{ asset('css/vendor/jquery.atwho.css') }}" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/trix/0.11.3/trix.css">
 @endsection
 
 @section('content')
@@ -16,6 +17,7 @@
                     </div>
 
                     <replies @removed="repliesCount--" @created="repliesCount++"></replies>
+
 
                 </div>
 
